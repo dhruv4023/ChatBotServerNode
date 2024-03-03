@@ -1,0 +1,35 @@
+
+user_schema = {
+    "_id": str,
+    "username": str,
+    "firstName": str,
+    "lastName": str,
+    "about": str,
+    "email": str,
+    "password": str,
+    "picPath": str,
+    "location": {
+        "state": str,
+        "city": str,
+        "pincode": int
+    },
+    "role": str,
+    "verified": bool,
+    "verificationToken": str,
+    "expiresAt": str  # Assuming you'll store this as a string representation of a date
+}
+
+chats={
+    "_id":str,
+    "username":str,
+    "title":str,
+    "templateContext":str,
+    "collectionName":str
+}
+
+
+chatHistory={
+    "username":str,
+    "question":str,
+    "answer":str,
+}

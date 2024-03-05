@@ -1,13 +1,14 @@
 // Import necessary modules
 import express from "express";
 import cors from "cors";
+import config from './config/config.js';
 
 // Create an Express application
 const app = express();
 
 // Middleware setup
 app.use(express.json()); // Parse JSON request bodies
-app.use(cors()); // Configure CORS for allowed origins
+app.use(cors({ origin: JSON.parse(config.origin_url_list) })); 
 
 // Root route that returns a simple "Server is running..." message
 app.get("/", (req, res) => {

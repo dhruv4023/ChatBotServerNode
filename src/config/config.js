@@ -17,6 +17,7 @@ export default {
     app_base_url: process.env.APP_BASE_URL || 'http://localhost:4040/api/v1',
     app_project_path: process.env.APP_PROJECT_PATH || 'http://localhost:4040',
     node_env: process.env.NODE_ENV || 'development',
+    origin_url_list: process.env.ORIGIN_URL_LIST || '[ "http://localhost:3000" ]',
     jwt_secret: process.env.JWT_SECRET,
     micro_services: {
         auth_api_end: process.env.AUTH_API_END,

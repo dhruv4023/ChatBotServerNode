@@ -5,6 +5,15 @@ const MESSAGES = {
     4002: "Chat history not found.",
     4003: "Chat history updated successfully.",
     4004: "Chat history deleted successfully.",
+    4005: "Question deleted successfully.",
+    4006: "Question not found.",
+
+    3000: "Chat created successfully.",
+    3001: "Chats fetched successfully.",
+    3002: "Chat fetched successfully.",
+    3003: "Chat not found.",
+    3004: "Chat updated successfully.",
+    3005: "Chat deleted successfully.",
 
     // Authorization messages
     5001: 'Unauthorized - Admin access required',

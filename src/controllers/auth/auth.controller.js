@@ -10,11 +10,9 @@ export const loginControl = async (req, res) => {
         const response = await sendRequest('post', `${AUTH_API_END}/api/v1/auth/login/`, {
             'Content-Type': 'application/json'
         }, JSON.stringify(req.body));
-        RESPONSE.success(res, response);
+        RESPONSE.successMediator(res, response);
     } catch (error) {
-        console.log(error)
-        console.log(AUTH_API_END)
-        RESPONSE.error(res, error);
+        RESPONSE.errorMediator(res, error);
     }
 };
 
@@ -35,9 +33,9 @@ export const registerControl = async (req, res) => {
         const response = await sendRequest('post', `${AUTH_API_END}/api/v1/auth/register/`, {
             ...formData.getHeaders(),
         }, formData);
-        RESPONSE.success(res, response);
+        RESPONSE.successMediator(res, response);
     } catch (error) {
-        RESPONSE.error(res, error);
+        RESPONSE.errorMediator(res, error);
     }
 };
 
@@ -46,9 +44,9 @@ export const getUserNames = async (req, res) => {
         const response = await sendRequest('get', `${AUTH_API_END}/api/v1/auth/get/usernames`, {
             'Content-Type': 'application/json'
         });
-        RESPONSE.success(res, response);
+        RESPONSE.successMediator(res, response);
     } catch (error) {
-        RESPONSE.error(res, error);
+        RESPONSE.errorMediator(res, error);
     }
 };
 
@@ -58,8 +56,8 @@ export const changePassControl = async (req, res) => {
             'Content-Type': 'application/json',
             'Authorization': req.header("Authorization")
         }, JSON.stringify(req.body));
-        RESPONSE.success(res, response);
+        RESPONSE.successMediator(res, response);
     } catch (error) {
-        RESPONSE.error(res, error);
+        RESPONSE.errorMediator(res, error);
     }
 };

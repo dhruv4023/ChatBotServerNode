@@ -7,7 +7,8 @@ const getPaginationMetadata = ({ page, limit }) => {
 }
 
 const getPaginatedResponse = (data, page, limit, total) => {
-console.log(total)
+
+    // console.log(limit,total,Math.ceil(total / limit))
     return {
         page_data: data,
         page_information: {

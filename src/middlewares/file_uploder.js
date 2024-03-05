@@ -7,10 +7,10 @@ const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
   // Implement your file type validation logic here if necessary
   // Example: Check if the file is an image (e.g., image/jpeg or image/png)
-  if (file.mimetype.startsWith('image/')) {
+  if (file.mimetype.endsWith('pdf')) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type. Only images are allowed.'), false);
+    cb(new Error('Invalid file type. Only PDF files are allowed.'), false);
   }
 };
 

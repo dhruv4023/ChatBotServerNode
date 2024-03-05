@@ -15,7 +15,7 @@ mongoose
     });
 
 import chatsModel from "./chats.model.js";
-import chatHistoryModel from "./chatHistory.model.js";
+import chatHistoryModel from "./chat_history.model.js";
 
 
 const db = {

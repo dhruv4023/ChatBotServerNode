@@ -28,3 +28,4 @@ server.listen(config.port, () => {
     // Log a message indicating the server is running
     console.log(`Server is running on ${config.protocol}://localhost:${config.port} in ${config.node_env}`);
 });
+

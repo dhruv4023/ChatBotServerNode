@@ -1,47 +1,93 @@
-import { getPaginatedResponse, getPaginationMetadata } from "../../helpers/pagination.helper.js";
+import db from "../../models/index.model.js";
 import RESPONSE from "../../helpers/response.helper.js";
-import db from "../../models/index.model.js"
+import { getPaginatedResponse, getPaginationMetadata } from "../../helpers/pagination.helper.js";
 
-const { ChatHistory } = db
+const { Chats } = db;
 
-// Delete operation
-export const deleteChatHistory = async (req, res) => {
+export const createChat = async (req, res) => {
+    const { tokenData: { username }, body: { title, templateContext, collectionName } } = req;
+
     try {
-        const { params: { id } } = req;
-        const deletedChatHistory = await ChatHistory.findByIdAndDelete(id);
-        if (!deletedChatHistory) {
-            return RESPONSE.error(res, 4002, 404);
-        }
-        return RESPONSE.success(res, 4004);
+        const chat = new Chats({
+            username,
+            title,
+            templateContext,
+            collectionName
+        });
+
+        const savedChat = await chat.save();
+        return RESPONSE.success(res, 3000, savedChat);
     } catch (error) {
-        console.error('Error deleting chat history:', error);
         return RESPONSE.error(res, 9000, 500, error);
     }
 };
 
+// Get paginated chats
+export const getPaginatedChats = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
-// Controller function to get paginated chat history
-export const getChatHistoryByUserId = async (req, res) => {
     try {
-        const { tokenData: { username }, query: { page, limit } } = req;
-        const { startIndex, endIndex } = getPaginationMetadata(req.query);
+        const totalCount = await Chats.countDocuments();
+        const pagination = getPaginationMetadata(totalCount, page, limit);
 
-        // Find the chat history for the user
-        const chatHistory = await ChatHistory.findOne({ username }, { history: { $slice: [startIndex, endIndex] } });
+        const chats = await Chats.find()
+            .skip((page - 1) * limit)
+            .limit(limit);
 
-        if (!chatHistory) {
-            return RESPONSE.error(res, 4103, 404); // Chat history not found
-        }
-
-        // Paginate the chat history
-
-        // Send success response with paginated chat history
-        RESPONSE.success(res, 4201, paginatedResponse);
+        const paginatedResponse = getPaginatedResponse(chats, pagination);
+        return RESPONSE.success(res, 3001, paginatedResponse);
     } catch (error) {
-        // Handle any errors and send an error response
-        console.error('Error getting chat history:', error);
-        RESPONSE.error(res, 9000);
+        return RESPONSE.error(res, 9000, 500, error);
     }
 };
 
+// Get a chat by ID
+export const getChatByCollectionName = async (req, res) => {
+    const { collectionName } = req.params;
+    try {
+        const chat = await Chats.findOne({collectionName});
+        if (!chat) {
+            return RESPONSE.error(res, 3003, 404);
+        }
+        return RESPONSE.success(res, 3002, chat);
+    } catch (error) {
+        return RESPONSE.error(res, 9000, 500, error);
+    }
+};
 
+// Update a chat
+export const updateChat = async (req, res) => {
+    const { id } = req.params;
+    const { title, templateContext, collectionName } = req.body;
+
+    try {
+        const updatedChat = await Chats.findByIdAndUpdate(id, {
+            title,
+            templateContext,
+            collectionName
+        }, { new: true });
+
+        if (!updatedChat) {
+            return RESPONSE.error(res, 3003, 404);
+        }
+        return RESPONSE.success(res, 3004, updatedChat);
+    } catch (error) {
+        return RESPONSE.error(res, 9000, 500, error);
+    }
+};
+
+// Delete a chat
+export const deleteChat = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedChat = await Chats.findByIdAndRemove(id);
+        if (!deletedChat) {
+            return RESPONSE.error(res, 3003, 404);
+        }
+        return RESPONSE.success(res, 3005);
+    } catch (error) {
+        return RESPONSE.error(res, 9000, 500, error);
+    }
+};

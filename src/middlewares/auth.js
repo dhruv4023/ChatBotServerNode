@@ -8,20 +8,24 @@ export const verifyTokenAndRole = (allowedRoles) => (req, res, next) => {
     const token = authorization?.split("Bearer ")[1];
 
     if (!token) {
-      RESPONSE.error(res, "invalid token");
+      RESPONSE.error(res, 5002, 403);
       return;
     }
 
-    const verified = jwt.verify(token, config.jwt_secret);
+    const verified = jwt.verify(token, config.jwt_secret, { ignoreExpiration: false });
     req.tokenData = verified;
 
     if (!allowedRoles.includes(verified.role)) {
-      RESPONSE.error(res, "unauthorised user");
+      RESPONSE.error(res, 5001, 403);
       return;
     }
 
     next();
   } catch (error) {
-    RESPONSE.error(res, error);
+    if (error.name === 'TokenExpiredError') {
+      RESPONSE.error(res, 5003, 403); // Error code for token expired
+    } else {
+      RESPONSE.error(res, 9999, 500, error);
+    }
   }
 };

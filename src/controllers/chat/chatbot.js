@@ -41,7 +41,7 @@ export const askQuestion = async (req, res) => {
 
     const validationErr = await isValidData(req.body, {
         question: 'required|string',
-        collectionName: 'required|string'
+        collectionName: 'string'
     });
 
     if (validationErr)
@@ -49,7 +49,7 @@ export const askQuestion = async (req, res) => {
 
     try {
         const { body: { question, collectionName }, tokenData: { username } } = req;
-        const data = JSON.stringify({ "query": question, "chain_name": collectionName });
+        const data = JSON.stringify({ "query": question, "chain_name": collectionName ? collectionName : username });
         const method = 'post';
         const url = `${CHATBOT_API_END_POINT}/ask`;
         const headers = {

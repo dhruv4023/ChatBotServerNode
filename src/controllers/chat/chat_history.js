@@ -1,4 +1,4 @@
-import { getPaginatedResponse, getPaginationMetadata } from "../../helpers/pagination.helper.js";
+import { getPaginatedResponse } from "../../helpers/pagination.helper.js";
 import RESPONSE from "../../helpers/response.helper.js";
 import db from "../../models/index.model.js"
 
@@ -22,10 +22,13 @@ export const deleteChatHistory = async (req, res) => {
 export const deleteQuestionFromHistory = async (req, res) => {
     const { tokenData: { username }, params: { id: questionId } } = req;
     try {
-        const updateQuery = { $pull: { history: { _id: questionId } } };
+        const updateQuery = {
+            $pull: { history: { _id: questionId } },
+            $inc: { "historyCount": -1 }
+        };
 
         const result = await ChatHistory.updateOne({ username }, updateQuery);
-        
+
         if (result.matchedCount != 0)
             return RESPONSE.success(res, 4005);
         else
@@ -41,9 +44,10 @@ export const deleteQuestionFromHistory = async (req, res) => {
 export const getChatHistoryByUserId = async (req, res) => {
     try {
         const { tokenData: { username }, query: { page, limit } } = req;
-        const { startIndex, endIndex } = getPaginationMetadata(req.query);
 
-        const chatHistory = await ChatHistory.findOne({ username }, { history: { $slice: [startIndex, endIndex] } });
+        const startIndex = (parseInt(page) - 1) * parseInt(limit)
+
+        const chatHistory = await ChatHistory.findOne({ username }, { history: { $slice: [startIndex, parseInt(limit)] } });
 
         if (!chatHistory)
             return RESPONSE.error(res, 4002, 404);

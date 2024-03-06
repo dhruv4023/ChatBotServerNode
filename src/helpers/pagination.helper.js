@@ -1,24 +1,20 @@
-// Utility functions for paginating user lists
 
-const getPaginationMetadata = ({ page, limit }) => {
-    const startIndex = (parseInt(page) - 1) * parseInt(limit) || 0;
-    const endIndex = startIndex + parseInt(limit) || 5;
-    return { startIndex, endIndex };
-}
 
-const getPaginatedResponse = (data, page, limit, total) => {
+const getPaginatedResponse = (data, current_page, limit, total) => {
+    const totalPages = Math.ceil(total / limit);
+    const currentPage = parseInt(current_page);
+    const previousPage = currentPage > 1 ? currentPage - 1 : null;
+    const nextPage = currentPage < totalPages ? currentPage + 1 : null;
 
-    // console.log(limit,total,Math.ceil(total / limit))
     return {
         page_data: data,
         page_information: {
             total_data: total,
-            last_page: Math.ceil(total / limit),
-            current_page: page,
-            previous_page: 0 + (page - 1),
-            next_page: page < Math.ceil(total / limit) ? page + 1 : 0
+            last_page: totalPages,
+            current_page: currentPage,
+            previous_page: previousPage,
+            next_page: nextPage
         }
     }
 }
-
-export { getPaginationMetadata, getPaginatedResponse };
+export { getPaginatedResponse };

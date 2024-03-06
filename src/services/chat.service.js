@@ -16,7 +16,10 @@ export const saveQuestionAndAnswerToChatHistory = async ({ username, historyObj 
         } else {
             await ChatHistory.updateOne(
                 { "username": username },
-                { "$push": { "history": { "$each": [historyObj], "$position": 0 } } }
+                {
+                    "$push": { "history": { "$each": [historyObj], "$position": 0 } },
+                    "$inc": { "historyCount": 1 }
+                }
             );
         }
     } catch (error) {

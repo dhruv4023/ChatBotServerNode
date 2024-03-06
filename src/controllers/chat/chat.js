@@ -1,6 +1,6 @@
 import db from "../../models/index.model.js";
 import RESPONSE from "../../helpers/response.helper.js";
-import { getPaginatedResponse, getPaginationMetadata } from "../../helpers/pagination.helper.js";
+import { getPaginatedResponse } from "../../helpers/pagination.helper.js";
 
 const { Chats } = db;
 
@@ -29,13 +29,12 @@ export const getPaginatedChats = async (req, res) => {
 
     try {
         const totalCount = await Chats.countDocuments();
-        const pagination = getPaginationMetadata(totalCount, page, limit);
 
         const chats = await Chats.find()
             .skip((page - 1) * limit)
             .limit(limit);
 
-        const paginatedResponse = getPaginatedResponse(chats, pagination);
+        const paginatedResponse = getPaginatedResponse(chats, page, limit, totalCount);
         return RESPONSE.success(res, 3001, paginatedResponse);
     } catch (error) {
         return RESPONSE.error(res, 9000, 500, error);
@@ -46,7 +45,7 @@ export const getPaginatedChats = async (req, res) => {
 export const getChatByCollectionName = async (req, res) => {
     const { collectionName } = req.params;
     try {
-        const chat = await Chats.findOne({collectionName});
+        const chat = await Chats.findOne({ collectionName });
         if (!chat) {
             return RESPONSE.error(res, 3003, 404);
         }

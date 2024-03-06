@@ -6,7 +6,7 @@ export const verifyTokenAndRole = (allowedRoles) => (req, res, next) => {
   try {
     const { authorization } = req.headers;
     const token = authorization?.split("Bearer ")[1];
-
+    // console.log(token)
     if (!token) {
       RESPONSE.error(res, 5002, 403);
       return;
@@ -22,6 +22,7 @@ export const verifyTokenAndRole = (allowedRoles) => (req, res, next) => {
 
     next();
   } catch (error) {
+    // console.log(error)
     if (error.name === 'TokenExpiredError') {
       RESPONSE.error(res, 5003, 403); // Error code for token expired
     } else {

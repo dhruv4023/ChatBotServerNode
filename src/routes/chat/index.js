@@ -7,8 +7,8 @@ import chatHistoryRoutes from './chat_history.routes.js';
 import chatRoutes from './chat.routes.js';
 
 // defining routes
-router.use('/chatbot', chatbotRoutes);
-router.use('/chat', chatHistoryRoutes);
-router.use('/chat', chatRoutes);
+router.use('', chatRoutes);
+router.use('/bot', chatbotRoutes);
+router.use('/history', chatHistoryRoutes);
 // exporting router
 export default router;

@@ -8,10 +8,10 @@ import { verifyTokenAndRole } from '../../middlewares/auth.js';
 
 const router = express.Router();
 
-router.get('/history', verifyTokenAndRole(["user", "admin"]), getChatHistoryByUserId);
+router.get('', verifyTokenAndRole(["user", "admin"]), getChatHistoryByUserId);
 
-router.delete('/history', verifyTokenAndRole(["user", "admin"]), deleteChatHistory);
-router.delete('/history/question/:id', verifyTokenAndRole(["user", "admin"]), deleteQuestionFromHistory);
+router.delete('', verifyTokenAndRole(["user", "admin"]), deleteChatHistory);
+router.delete('/question/:id', verifyTokenAndRole(["user", "admin"]), deleteQuestionFromHistory);
 
 
 

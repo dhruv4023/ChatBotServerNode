@@ -57,8 +57,8 @@ export const askQuestion = async (req, res) => {
             'Content-Type': 'application/json'
         };
 
-        const response = await sendRequest(method, url, headers, data);
-        // const response = { "status": 200, data: { "success": true, "data": "here is demo answer ........." } }
+        // const response = await sendRequest(method, url, headers, data);
+        const response = { "status": 200, data: { "success": true, "data": "here is demo answer ........." } }
 
         await saveQuestionAndAnswerToChatHistory({ username, historyObj: { question, answer: response.data.data, collectionName } })
         RESPONSE.successMediator(res, response);

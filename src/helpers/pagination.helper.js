@@ -1,6 +1,4 @@
-
-
-const getPaginatedResponse = (data, current_page, limit, total) => {
+export const getPaginatedResponse = (data, current_page, limit, total) => {
     const totalPages = Math.ceil(total / limit);
     const currentPage = parseInt(current_page);
     const previousPage = currentPage > 1 ? currentPage - 1 : null;
@@ -17,4 +15,3 @@ const getPaginatedResponse = (data, current_page, limit, total) => {
         }
     }
 }
-export { getPaginatedResponse };

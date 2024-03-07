@@ -1,6 +1,7 @@
 import db from "../../models/index.model.js";
 import RESPONSE from "../../helpers/response.helper.js";
 import { getPaginatedResponse } from "../../helpers/pagination.helper.js";
+import isValidData from "../../helpers/validation/data_validator.js";
 
 const { Chats } = db;
 
@@ -8,6 +9,20 @@ export const createChat = async (req, res) => {
     const { tokenData: { username }, body: { title, templateContext, collectionName } } = req;
 
     try {
+        // Define validation rules
+        const validationRules = {
+            title: 'required|string',
+            templateContext: 'required|string',
+            collectionName: 'string'
+        };
+
+        // Validate data
+        const validationErr = await isValidData({ title, templateContext, collectionName }, validationRules);
+        if (validationErr) {
+            return RESPONSE.error(res, validationErr);
+        }
+
+        // Proceed with creating the chat
         const chat = new Chats({
             username,
             title,
@@ -57,10 +72,22 @@ export const getChatByCollectionName = async (req, res) => {
 
 // Update a chat
 export const updateChat = async (req, res) => {
-    const { id } = req.params;
-    const { title, templateContext, collectionName } = req.body;
+    const { params: { id }, body: { title, templateContext, collectionName } } = req;
+
+    // Define validation rules
+    const validationRules = {
+        title: 'required|string',
+        templateContext: 'required|string',
+        collectionName: 'string'
+    };
 
     try {
+        // Validate data
+        const validationErr = await isValidData({ title, templateContext, collectionName }, validationRules);
+        if (validationErr) {
+            return RESPONSE.error(res, validationErr);
+        }
+
         const updatedChat = await Chats.findByIdAndUpdate(id, {
             title,
             templateContext,

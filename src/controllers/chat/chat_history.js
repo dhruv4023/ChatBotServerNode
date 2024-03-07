@@ -1,8 +1,9 @@
 import { getPaginatedResponse } from "../../helpers/pagination.helper.js";
 import RESPONSE from "../../helpers/response.helper.js";
-import db from "../../models/index.model.js"
+import isValidData from "../../helpers/validation/data_validator.js";
+import db from "../../models/index.model.js";
 
-const { ChatHistory } = db
+const { ChatHistory } = db;
 
 export const deleteChatHistory = async (req, res) => {
     try {
@@ -40,24 +41,32 @@ export const deleteQuestionFromHistory = async (req, res) => {
     }
 };
 
-
 export const getChatHistoryByUserId = async (req, res) => {
     try {
         const { tokenData: { username }, query: { page, limit } } = req;
 
-        const startIndex = (parseInt(page) - 1) * parseInt(limit)
+        // Validate query parameters
+        const validationRules = {
+            page: 'integer',
+            limit: 'integer'
+        };
+
+        const validationErr = await isValidData({ page, limit }, validationRules);
+        if (validationErr) {
+            return RESPONSE.error(res, validationErr);
+        }
+
+        const startIndex = (parseInt(page) - 1) * parseInt(limit);
 
         const chatHistory = await ChatHistory.findOne({ username }, { history: { $slice: [startIndex, parseInt(limit)] } });
 
         if (!chatHistory)
             return RESPONSE.error(res, 4002, 404);
 
-        const paginatedResponse = getPaginatedResponse(chatHistory.history, page, limit, chatHistory.historyCount)
-        RESPONSE.success(res, 4001, paginatedResponse);
+        const paginatedResponse = getPaginatedResponse(chatHistory.history, page, limit, chatHistory.historyCount);
+        return RESPONSE.success(res, 4001, paginatedResponse);
     } catch (error) {
         console.error('Error getting chat history:', error);
-        RESPONSE.error(res, 9000);
+        return RESPONSE.error(res, 9000);
     }
 };
-
-

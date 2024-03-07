@@ -25,11 +25,10 @@ const MESSAGES = {
 };
 
 const getMessage = messageCode => {
+    if (!isNaN(messageCode) && MESSAGES.hasOwnProperty(messageCode))
+        return MESSAGES[messageCode];
 
-    if (isNaN(messageCode))
-        return messageCode;
-
-    return messageCode ? MESSAGES[messageCode] : '';
+    return messageCode;
 };
 
 export default getMessage;

@@ -53,8 +53,7 @@ export const askQuestion = async (req, res) => {
         const method = 'post';
         const url = `${CHATBOT_API_END_POINT}/ask`;
         const headers = {
-            'Authorization': "Bearer " + config.HUGGINGFACEHUB_API_TOKEN,
-            // 'Authorization': req.headers['authorization'],
+            'Authorization': req.headers['authorization'],
             'Content-Type': 'application/json'
         };
         console.log(url)

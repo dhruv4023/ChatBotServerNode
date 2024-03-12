@@ -8,7 +8,7 @@ const app = express();
 
 // Middleware setup
 app.use(express.json()); // Parse JSON request bodies
-app.use(cors({ origin: JSON.parse(config.origin_url_list) })); 
+app.use(cors({ origin: JSON.parse(config.origin_url_list) }));
 
 // Root route that returns a simple "Server is running..." message
 app.get("/", (req, res) => {

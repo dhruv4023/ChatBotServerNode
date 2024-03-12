@@ -22,5 +22,6 @@ export default {
     micro_services: {
         auth_api_end: process.env.AUTH_API_END,
         chatbot_api_end: process.env.LLM_CHAT_API_END,
-    }
+    },
+    HUGGINGFACEHUB_API_TOKEN: process.env.HUGGINGFACEHUB_API_TOKEN
 };

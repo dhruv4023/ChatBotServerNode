@@ -52,7 +52,7 @@ export const getUserNames = async (req, res) => {
 
 export const changePassControl = async (req, res) => {
     try {
-        const response = await sendRequest('put', `${AUTH_API_END}/api/v1/auth/change/password`, {
+        const response = await sendRequest('post', `${AUTH_API_END}/api/v1/auth/change/password`, {
             'Content-Type': 'application/json',
             'Authorization': req.header("Authorization")
         }, JSON.stringify(req.body));

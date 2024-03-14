@@ -59,7 +59,7 @@ export const askQuestion = async (req, res) => {
         console.log(url)
         const response = await sendRequest(method, url, headers, data);
         // const response = { "status": 200, data: { "success": true, "data": "here is demo answer ........." } }
-
+        console.log(response)
         await saveQuestionAndAnswerToChatHistory({ username, historyObj: { question, answer: response.data.data, collectionName } })
         RESPONSE.successMediator(res, response);
     } catch (error) {

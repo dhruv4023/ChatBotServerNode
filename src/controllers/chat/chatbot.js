@@ -56,11 +56,11 @@ export const askQuestion = async (req, res) => {
             'Authorization': req.headers['authorization'],
             'Content-Type': 'application/json'
         };
-        // console.log(url)
+
         const response = await sendRequest(method, url, headers, data);
         // const response = { "status": 200, data: { "success": true, "data": "here is demo answer ........." } }
 
-        await saveQuestionAndAnswerToChatHistory({ username, historyObj: { question, answer: response.data.data, collectionName } })
+        await saveQuestionAndAnswerToChatHistory({ username, historyObj: { question, answer: response.data.data, collectionName: collectionName ? collectionName : "CHAT WITH YOUR PDF" } })
         RESPONSE.successMediator(res, response);
     } catch (error) {
         console.log(error)
@@ -68,3 +68,17 @@ export const askQuestion = async (req, res) => {
     }
 };
 
+export const tmpChainExistOrNot = async (req, res) => {
+    try {
+        const url = `${CHATBOT_API_END_POINT}/tmp/chain/exist`;
+        const headers = {
+            'Authorization': req.headers['authorization'],
+            'Content-Type': 'application/json'
+        };
+        const response = await sendRequest("get", url, headers, {});
+        RESPONSE.successMediator(res, response);
+    } catch (error) {
+        console.log(error)
+        RESPONSE.errorMediator(res, error);
+    }
+};

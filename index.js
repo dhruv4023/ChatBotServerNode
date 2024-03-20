@@ -27,11 +27,5 @@ if (config.protocol === 'https') {
 server.listen(config.port, () => {
     // Log a message indicating the server is running
     console.log(`Server is running on ${config.protocol}://localhost:${config.port} in ${config.node_env}`);
+    Object.keys(config.micro_services).map(key => fetch(config.micro_services[key]).then((d) => d.json().then((jd) => console.log(jd))).catch(console.log))
 });
-
-
-
-
-function name(params) {
-
-}

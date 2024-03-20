@@ -12,6 +12,11 @@ export default {
         privkey: process.env.SERVER_KEY || 'path to priv key',
         fullchain: process.env.SERVER_CERT || 'path to fullchain key',
     },
+    cloudinary: {
+        name: process.env.CLOUDINARY_CLOUD_NAME,
+        key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+    },
     port: process.env.APP_PORT || 4040,
     protocol: process.env.PROTOCOL || 'http',
     app_base_url: process.env.APP_BASE_URL || 'http://localhost:4040/api/v1',

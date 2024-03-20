@@ -2,6 +2,7 @@
 import express from "express";
 import cors from "cors";
 import config from './config/config.js';
+import "./config/cloudinary.config.js"
 
 // Create an Express application
 const app = express();
@@ -12,7 +13,7 @@ app.use(cors({ origin: JSON.parse(config.origin_url_list) }));
 
 // Root route that returns a simple "Server is running..." message
 app.get("/", (req, res) => {
-  res.send("Server is running...");
+  res.send("Main Server is running...");
 });
 
 // Import routes

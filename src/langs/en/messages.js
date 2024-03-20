@@ -14,6 +14,7 @@ const MESSAGES = {
     3003: "Chat not found.",
     3004: "Chat updated successfully.",
     3005: "Chat deleted successfully.",
+    3006: "Chat with this collectionName already exist.",
 
     // Authorization messages
     5001: 'Unauthorized - Admin access required',

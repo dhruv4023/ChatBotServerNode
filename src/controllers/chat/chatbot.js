@@ -56,7 +56,7 @@ export const askQuestion = async (req, res) => {
             'Authorization': req.headers['authorization'],
             'Content-Type': 'application/json'
         };
-        console.log(url)
+        // console.log(url)
         const response = await sendRequest(method, url, headers, data);
         // const response = { "status": 200, data: { "success": true, "data": "here is demo answer ........." } }
 

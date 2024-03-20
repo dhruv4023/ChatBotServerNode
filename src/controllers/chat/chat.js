@@ -2,13 +2,15 @@ import db from "../../models/index.model.js";
 import RESPONSE from "../../helpers/response.helper.js";
 import { getPaginatedResponse } from "../../helpers/pagination.helper.js";
 import isValidData from "../../helpers/validation/data_validator.js";
+import { uploadFile } from "../../helpers/upload_file_to_cloudinary.helper.js";
 
 const { Chats } = db;
 
 export const createChat = async (req, res) => {
-    const { tokenData: { username }, body: { title, templateContext, collectionName } } = req;
+    const { tokenData: { username }, body: { title, templateContext, collectionName, sampleQuetions }, file } = req;
 
     try {
+        // console.log(file,sampleQuetions)
         // Define validation rules
         const validationRules = {
             title: 'required|string',
@@ -22,12 +24,26 @@ export const createChat = async (req, res) => {
             return RESPONSE.error(res, validationErr);
         }
 
+        if (await Chats.findOne({ collectionName })) {
+            return RESPONSE.error(res, 3006, 400);
+        }
+        let icon = null;
+        if (file) {
+            const fileData = await uploadFile({
+                file,
+                newImgFileName: collectionName + "_icon",
+                dirAddress: "ChatIcons/",
+            });
+            icon = fileData.public_id;
+        }
         // Proceed with creating the chat
         const chat = new Chats({
             username,
             title,
             templateContext,
-            collectionName
+            collectionName,
+            sampleQuetions,
+            buttonIcon: icon
         });
 
         const savedChat = await chat.save();
@@ -72,7 +88,7 @@ export const getChatByCollectionName = async (req, res) => {
 
 // Update a chat
 export const updateChat = async (req, res) => {
-    const { params: { id }, body: { title, templateContext, collectionName } } = req;
+    const { params: { id }, body: { title, templateContext, collectionName }, file } = req;
 
     // Define validation rules
     const validationRules = {
@@ -88,11 +104,27 @@ export const updateChat = async (req, res) => {
             return RESPONSE.error(res, validationErr);
         }
 
-        const updatedChat = await Chats.findByIdAndUpdate(id, {
+        const chat = await Chats.findOne({ id })
+        // console.log(chat)
+        if (!chat) {
+            return RESPONSE.error(res, 3003, 404);
+        }
+
+        let icon = null;
+        if (file) {
+            const fileData = await uploadFile({
+                file,
+                newImgFileName: collectionName + "_icon",
+                dirAddress: "ChatIcons/",
+            });
+            icon = fileData.public_id;
+        }
+
+        const updatedChat = await Chats.findOneAndUpdate(id, {
             title,
             templateContext,
-            collectionName
-        }, { new: true });
+            buttonIcon: icon ? icon : chat?.buttonIcon
+        });
 
         if (!updatedChat) {
             return RESPONSE.error(res, 3003, 404);
